@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+	
+	<!-- Map<key, value> : key 값으로 조회된 value값 사용 
+		parameterType="Map" : begin, end key이름을 가지는
+		Map 객체를 전달받아 begin, end key로 조회된 value값 대입 -->
+	<select id="list" resultType="com.bc.mybatis.VO"
+			parameterType="Map">
+		SELECT *
+		FROM (SELECT ROWNUM R_NUM, B.*
+		        FROM (SELECT *
+		              FROM BOARD
+		              ORDER BY GROUPS DESC, LEV ASC
+		             ) B
+		     )    
+		WHERE R_NUM BETWEEN #{begin} AND #{end}	
+	</select>
+	
+	<select id="one" parameterType="String"
+			resultType="com.bc.mybatis.VO">
+		SELECT * FROM BOARD WHERE SEQ = #{seq}
+	</select>
+	
+	<!-- 댓글 삽입 전 lev update 처리 원글과 
+	          같은 그룹이면서 레벨이 같거나 큰 레벨은 
+	          레벨을 1 증가-->
+	<update id="upadateLev" parameterType="Map">
+		UPDATE BOARD 
+		  SET LEV = LEV + 1
+		 WHERE GROUPS = #{groups} AND LEV >= #{lev} 
+	</update>
+	
+	<!-- 댓글 데이터 입력
+	     전달받은 값 저장   -->
+	<insert id="re_insert" parameterType="com.bc.mybatis.VO">
+		INSERT INTO BOARD(SEQ, WRITER, TITLE, CONTENT, PWD, HIT,GROUPS, STEP, LEV, BNAME,REGDATE, FILENAME, IP)
+		VALUES (board_seq.nextval, #{writer}, #{title}, #{content}, #{pwd}, 0,
+		        #{groups}, #{step}, #{lev}, 'BBS', SYSDATE, #{filename}, #{ip})
+	</insert>
+	
+	<insert id="post_insert" parameterType="com.bc.mybatis.VO">
+		INSERT INTO BOARD(SEQ, WRITER, TITLE, CONTENT, PWD, HIT,GROUPS, STEP, LEV, BNAME,REGDATE, FILENAME, IP)
+		VALUES (board_seq.nextval, #{writer}, #{title}, #{content}, #{pwd}, 0,
+		        BOARD_GROUP.NEXTVAL, 0, 0, 'BBS', SYSDATE, #{filename}, #{ip})
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

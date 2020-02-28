@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BBS">
+
+	<!-- 전체 게시글 갯수 조회 -->
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) FROM BBS_T
+	</select>
+	
+	<!-- 페이지에 표시할 게시글 조회 -->
+	<select id="list" resultType="com.bs.mybatis.BBSVO" parameterType="Map">
+		SELECT *
+		FROM (
+		        SELECT ROWNUM R_NUM, BBS.*
+		        FROM (SELECT *
+		                FROM BBS_T
+		               ORDER BY B_IDX DESC) BBS       
+		    )
+	  WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	<!-- mapper에서는 파라미터를 #{} -->
+	
+	<!-- 해당 인덱스번호를 가진 게시글 정보 select -->
+	<select id="one" resultType="bbsVO" parameterType="int">
+		SELECT * 
+		  FROM BBS_T
+		 WHERE B_IDX = #{b_idx}
+	</select>
+	
+	
+	<!-- 해당 인덱스 번호를 가진 게시글 댓글 정보 select -->
+	<select id="comm" resultType="com.bs.mybatis.COMMVO" parameterType="int">
+		SELECT C_IDX, WRITER, CONTENT, PWD, WRITE_DATE, IP, B_IDX
+		  FROM COMMENT_T
+		 WHERE B_IDX = #{b_idx}
+		   ORDER BY C_IDX DESC
+	</select>
+	
+	<!-- BBS객체 insert -->
+	<insert id="insertBvo" parameterType="bbsVO">
+		INSERT INTO BBS_T
+		   (B_IDX, SUBJECT, WRITER, CONTENT, FILE_NAME, ORI_NAME, PWD, WRITE_DATE, IP, HIT)
+		VALUES (bbs_t_seq.nextval, #{subject}, #{writer}, #{content}, #{file_name}, #{ori_name}, #{pwd}, SYSDATE, #{ip}, 1)
+	</insert>
+
+	<insert id="insertComm" parameterType="com.bs.mybatis.COMMVO">
+		INSERT INTO COMMENT_T
+		   (c_idx, writer, content, pwd, write_date, ip, b_idx)
+		VALUES (COMMENT_T_SEQ.NEXTVAL, #{writer}, #{content, }, #{pwd}, SYSDATE, #{ip}, #{b_idx})
+	</insert>
+	
+	<!-- update -->
+	<update id="hit" parameterType="int">
+		UPDATE BBS_T SET HIT = HIT + 1 WHERE B_IDX = #{b_idx}
+	</update>
+	
+	<!-- delete -->
+	<delete id="delComm" parameterType="String">
+			DELETE FROM COMMENT_T WHERE C_IDX = #{c_idx} 
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

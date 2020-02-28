@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<members>
+	<member>
+		<idx>1</idx>
+		<name>홍길동1</name>
+		<age>28</age>
+		<addr>서울</addr>
+		<regdate>2020-01-06</regdate>
+	</member>
+	<member>
+		<idx>1</idx>
+		<name>홍길동2</name>
+		<age>28</age>
+		<addr>경기도</addr>
+		<regdate>2020-01-15</regdate>
+	</member>
+	<member>
+		<idx>1</idx>
+		<name>홍길동3</name>
+		<age>28</age>
+		<addr>충청도</addr>
+		<regdate>2020-01-01</regdate>
+	</member>
+	<member>
+		<idx>1</idx>
+		<name>홍길동4</name>
+		<age>28</age>
+		<addr>경남</addr>
+		<regdate>2020-01-02</regdate>
+	</member>
+</members>

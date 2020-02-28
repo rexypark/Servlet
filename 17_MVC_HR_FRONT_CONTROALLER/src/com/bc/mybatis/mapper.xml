@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="HR">
+	<select id="list" resultType="com.bc.model.vo.EmployeeVO">
+		SELECT *
+		 FROM EMPLOYEES ORDER BY EMPLOYEE_ID
+	</select>
+	<select id="deptList" parameterType="string" resultType="com.bc.model.vo.EmployeeVO">
+		SELECT *
+		 FROM EMPLOYEES 
+		 WHERE DEPARTMENT_ID = #{deptno}
+		ORDER BY EMPLOYEE_ID
+	</select>
+	<select id="nameList" parameterType="string" resultType="com.bc.model.vo.EmployeeVO">
+		SELECT *
+		 FROM EMPLOYEES 
+		 WHERE UPPER(FIRST_NAME) LIKE UPPER(#{deptno}) OR LAST_NAME LIKE UPPER(#{deptno})
+		ORDER BY EMPLOYEE_ID
+	</select>
+	<!-- 동적검색으로 직원 조회 -->
+	<select id="search" parameterType="Map" resultType="com.bc.model.vo.EmployeeVO">
+		
+		SELECT *
+		 FROM EMPLOYEES 
+		 <choose>
+			<when test="idx == 0">
+				WHERE EMPLOYEE_ID = #{keyword} 
+			</when>
+			<when test="idx == 1">
+				WHERE FIRST_NAME = INITCAP(#{keyword}) OR
+					  LAST_NAME = INITCAP(#{keyword})
+			</when>
+			<when test="idx == 3">
+				WHERE JOB_ID = #{keyword} 
+			</when>
+			<when test="idx == 4">
+				WHERE DEPARTMENT_ID = #{keyword} 
+			</when>
+		</choose>
+		ORDER BY EMPLOYEE_ID
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guestbook">
+	<select id="all" resultType="com.bc.mybatis.GuestbookVO">
+		SELECT *
+		FROM GUESTBOOK
+		ORDER BY IDX
+	</select>
+	<select id="searchIdx" parameterType="string" resultType="com.bc.mybatis.GuestbookVO">
+		SELECT *
+		FROM GUESTBOOK
+		WHERE IDX = #{idx}
+	</select>
+	
+	<!-- insert -->
+	<insert id="writeInsert" parameterType="com.bc.mybatis.GuestbookVO">
+		INSERT INTO GUESTBOOK
+    		(IDX, NAME, SUBJECT, CONTENT, EMAIL, PWD, REGDATE)
+		  VALUES (GUESTBOOK_SEQ.NEXTVAL, #{name}, #{subject}, #{content}, #{email}, #{pwd}, SYSDATE)
+	</insert>
+	
+	<!-- update -->
+	<update id="editData" parameterType="guestbookVO">
+		UPDATE GUESTBOOK
+	      SET NAME = #{name}, SUBJECT = #{subject}, CONTENT = #{content}, EMAIL = #{email}, REGDATE = SYSDATE 
+		 WHERE IDX = #{idx} 
+	</update>
+	
+	<!-- delete -->
+	<delete id="deleteData" parameterType="string">
+		DELETE FROM GUESTBOOK WHERE IDX = #{idx}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

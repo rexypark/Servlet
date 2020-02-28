@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guestbook">
+	<select id="all" resultType="com.bc.model.vo.GuestbookVO">
+		SELECT *
+		FROM GUESTBOOK
+		ORDER BY IDX DESC
+	</select>
+	<select id="searchIdx" parameterType="string" resultType="com.bc.model.vo.GuestbookVO">
+		SELECT *
+		FROM GUESTBOOK
+		WHERE IDX = #{idx}
+	</select>
+	
+	<!-- insert -->
+	<insert id="writeInsert" parameterType="com.bc.model.vo.GuestbookVO">
+		INSERT INTO GUESTBOOK
+    		(IDX, NAME, SUBJECT, CONTENT, EMAIL, PWD, REGDATE)
+		  VALUES (GUESTBOOK_SEQ.NEXTVAL, #{name}, #{subject}, #{content}, #{email}, #{pwd}, SYSDATE)
+	</insert>
+	
+	<!-- update -->
+	<update id="editData" parameterType="com.bc.model.vo.GuestbookVO">
+		UPDATE GUESTBOOK
+	      SET NAME = #{name}, SUBJECT = #{subject}, CONTENT = #{content}, EMAIL = #{email}, REGDATE = SYSDATE 
+		 WHERE IDX = #{idx} 
+	</update>
+	
+	<!-- delete -->
+	<delete id="deleteData" parameterType="string">
+		DELETE FROM GUESTBOOK WHERE IDX = #{idx}
+	</delete>
+	
+	
+	<!-- 전체 게시글 갯수 조회 -->
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) FROM GUESTBOOK
+	</select>
+	
+	<!-- 페이지에 표시할 게시글 조회 -->
+	<select id="list" resultType="com.bc.model.vo.GuestbookVO" parameterType="Map">
+		SELECT *
+		FROM (
+		        SELECT ROWNUM R_NUM, BBS.*
+		        FROM (SELECT *
+		                FROM BBS_T
+		               ORDER BY B_IDX DESC) BBS       
+		    )
+	  WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- BBS객체 insert -->
+	<insert id="insertBvo" parameterType="com.bc.model.vo.GuestbookVO">
+		INSERT INTO BBS_T
+		   (B_IDX, SUBJECT, WRITER, CONTENT, FILE_NAME, ORI_NAME, PWD, WRITE_DATE, IP, HIT)
+		VALUES (bbs_t_seq.nextval, #{subject}, #{writer}, #{content}, #{file_name}, #{ori_name}, #{pwd}, SYSDATE, #{ip}, 1)
+	</insert>
+	
+	<!-- update -->
+	<update id="hit" parameterType="int">
+		UPDATE BBS_T SET HIT = HIT + 1 WHERE B_IDX = #{b_idx}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

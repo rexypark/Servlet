@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="org.mybatis.example.BlogMapper">
+	<!-- select 3개의 속성 id, resultType, parameterType 
+	
+			  id      : 사용 할 명칭(필수항목), 현재 mapping파일에서 유일한 값
+		  resultType  : 조회 결과 값을 저장하기 위한 데이터 타입 (데이터 하나에 대한 타입 지정)
+		parameterType : 전달 받은 파라미터 데이터 타입 지정
+	
+	-->
+   <select id="selectAll" resultType="com.study.mybatis.MemberVO">
+   	 SELECT * 
+   	   FROM MEMBER2
+   	  ORDER BY IDX
+   </select>
+   
+   <select id="selectOne" parameterType="string" resultType="com.study.mybatis.MemberVO">
+   	 SELECT * 
+	  FROM MEMBER2
+	 WHERE ID = #{id}
+   </select>
+
+   <insert id="insertMember" parameterType="com.study.mybatis.MemberVO">
+		INSERT INTO MEMBER2 (IDX, ID, PWD, NAME, AGE, ADDRESS, REG)
+		  VALUES (MEMBER2_SEQ.NEXTVAL, #{id}, #{pwd}, #{name}, #{age}, #{address}, SYSDATE)
+	</insert>
+	
+	<insert id="insertMember2" parameterType="com.study.mybatis.MemberVO">
+		INSERT INTO MEMBER2 (IDX, ID, PWD, NAME, AGE, ADDRESS, REG)
+		  VALUES (MEMBER2_SEQ.NEXTVAL, #{id}, #{pwd}, #{name}, #{age}, #{address}, SYSDATE)
+	</insert>
+	
+	
+	<!-- 바인드변수가 1개인 경우 파라미터타입 생략가능 & 바인드변수명 자유롭게 변경 가능!! -->
+	<delete id="deleteMember" parameterType="string">
+		DELETE FROM MEMBER2 WHERE ID = #{id}
+	</delete>
+</mapper>
+
+
+	
+	

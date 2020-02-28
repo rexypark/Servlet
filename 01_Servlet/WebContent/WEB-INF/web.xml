@@ -4,4 +4,13 @@
   <welcome-file-list>
     <welcome-file>welcome.html</welcome-file>
   </welcome-file-list>
+  
+  <servlet>
+  	<servlet-name>today</servlet-name>
+  	<servlet-class>com.mystudy.servlet.Ex02</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>today</servlet-name>
+  	<url-pattern>/today2</url-pattern>
+  </servlet-mapping>
 </web-app>
